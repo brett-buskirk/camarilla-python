@@ -51,7 +51,7 @@ async def roll(ctx, s_dice='0', op='-h', h_dice='0'):
     # Determine the results of the hunger dice, if any
     hunger_rolls = []
     bestial_failure = False
-    messy_crit = False
+    messy_critical = False
     for i in range(h_dice):
         rand = random.randint(1, 10)
         hunger_rolls.append(rand)
@@ -59,22 +59,23 @@ async def roll(ctx, s_dice='0', op='-h', h_dice='0'):
             success += 1
         elif rand == 10:
             critical += 1
-            messy_crit = True
+            messy_critical = True
         elif rand == 1:
             bestial_failure = True
 
-    # Find double crits (each pair of crits = 4 successes)
-    double_crit = (critical // 2) * 4
+    # Find double critical rolls (each pair of critical rolls = 4 successes)
+    double_critical = (critical // 2) * 4
 
-    # Left-over crits
-    leftover_crit = (critical % 2)
+    # Left-over critical rolls
+    leftover_critical = (critical % 2)
 
     # Tally the two
-    crit_tally = double_crit + leftover_crit
+    critical_tally = double_critical + leftover_critical
 
     # Determine final successes
-    final_success = success + crit_tally
+    final_success = success + critical_tally
 
+    # Format embed to send to server
     embed = discord.Embed(
         title='Results',
         color=discord.Colour.dark_red()
@@ -85,8 +86,10 @@ async def roll(ctx, s_dice='0', op='-h', h_dice='0'):
     embed.add_field(name='Normal Successes', value=str(success), inline=True)
     embed.add_field(name='Critical Successes', value=str(critical), inline=True)
     embed.add_field(name='Total Successes', value=str(final_success), inline=False)
-    embed.add_field(name='Messy Critical', value=str(messy_crit), inline=True)
+    embed.add_field(name='Messy Critical', value=str(messy_critical), inline=True)
     embed.add_field(name='Bestial Failure', value=str(bestial_failure), inline=True)
 
+    # Send embed to server
     await ctx.send(embed=embed)
+
 bot.run(TOKEN)
