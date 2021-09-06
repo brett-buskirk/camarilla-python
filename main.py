@@ -95,16 +95,6 @@ async def roll(ctx, s_dice='0', op='-h', h_dice='0'):
     await ctx.send(embed=embed)
 
 
-@bot.command(help="Adds record to MongoDB")
-async def aclan(ctx, clan):
-    collection_name = db['clans']
-    document = {
-        "name": clan
-    }
-    collection_name.insert_one(document)
-    await ctx.send(f'{clan} added to database!')
-
-
 @bot.command(help="Retrieves information about specified clan.")
 async def clan(ctx, clan=""):
     # Retrieve the clan collection
@@ -112,7 +102,7 @@ async def clan(ctx, clan=""):
 
     # Make sure clan exists in collection
     try:
-        details = collection_name.find_one({"name": clan})
+        details = collection_name.find_one({"name": clan.lower()})
         clan_name = details["name"]
     except Exception:
         await ctx.send("Sorry, cannot find that clan...")
@@ -120,7 +110,7 @@ async def clan(ctx, clan=""):
 
     # Create the embed to send to server
     embed = discord.Embed(
-        title=clan_name,
+        title=f'{clan_name.upper()}: {details["title"]}',
         color=discord.Colour.dark_red()
     )
     embed.set_thumbnail(url=details["icon"])
