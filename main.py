@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 from discord.ext import commands
 import random
+from db_connect import connect_db
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -11,6 +12,7 @@ intents = discord.Intents.default()
 intents.members = True
 
 bot = commands.Bot(command_prefix='.', intents=intents)
+db = connect_db()
 
 
 @bot.event
@@ -80,7 +82,7 @@ async def roll(ctx, s_dice='0', op='-h', h_dice='0'):
         title='Results',
         color=discord.Colour.dark_red()
     )
-
+    embed.set_thumbnail(url="https://i.imgur.com/C0IhAEr.jpg")
     embed.add_field(name='Standard Dice', value=f'{s_dice} dice: {str(standard_rolls)}', inline=False)
     embed.add_field(name='Hunger Dice', value=f'{h_dice} dice: {str(hunger_rolls)}', inline=False)
     embed.add_field(name='Normal Successes', value=str(success), inline=True)
@@ -91,5 +93,45 @@ async def roll(ctx, s_dice='0', op='-h', h_dice='0'):
 
     # Send embed to server
     await ctx.send(embed=embed)
+
+
+@bot.command(help="Adds record to MongoDB")
+async def aclan(ctx, clan):
+    collection_name = db['clans']
+    document = {
+        "name": clan
+    }
+    collection_name.insert_one(document)
+    await ctx.send(f'{clan} added to database!')
+
+
+@bot.command(help="Retrieves information about specified clan.")
+async def clan(ctx, clan=""):
+    # Retrieve the clan collection
+    collection_name = db['clans']
+
+    # Make sure clan exists in collection
+    try:
+        details = collection_name.find_one({"name": clan})
+        clan_name = details["name"]
+    except Exception:
+        await ctx.send("Sorry, cannot find that clan...")
+        return
+
+    # Create the embed to send to server
+    embed = discord.Embed(
+        title=clan_name,
+        color=discord.Colour.dark_red()
+    )
+    embed.set_thumbnail(url=details["icon"])
+    embed.add_field(name="Description", value=details["description"], inline=False)
+    embed.add_field(name="Nicknames", value=", ".join(details["nicknames"]), inline=False)
+    embed.add_field(name="Disciplines", value=", ".join(details["disciplines"]), inline=False)
+    embed.add_field(name="Bane", value=details["bane"], inline=False)
+    embed.set_footer(text=details["page"])
+
+    # Send embed to server
+    await ctx.send(embed=embed)
+
 
 bot.run(TOKEN)
