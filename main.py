@@ -21,7 +21,7 @@ async def on_ready():
 
 
 @bot.command(help='Rolls dice in N or N -h N format, where -h N are hunger dice.')
-async def roll(ctx, s_dice: str = '0', op: str = '-h', h_dice: str = '0'):
+async def roll(ctx, s_dice='0', op='-h', h_dice='0'):
     """Rolls dice in N -h N format."""
     from dice import dice_roll
     embed = dice_roll(s_dice, op, h_dice)
@@ -33,6 +33,21 @@ async def clan(ctx, clan=""):
     """Returns the requested clan information"""
     from clans import clan_details
     embed = clan_details(clan, db)
+    await ctx.send(embed=embed)
+
+
+@bot.command(help="Retrieves a specified rule or list.")
+async def lookup(ctx, rule=""):
+    """Returns the requested list"""
+    if rule == 'clans':
+        from clans import clans_list
+        embed = clans_list(db)
+    else:
+        embed = discord.Embed(
+            title=f'Cannot find {rule}',
+            color=discord.Colour.dark_red()
+        )
+
     await ctx.send(embed=embed)
 
 

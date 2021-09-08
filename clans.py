@@ -29,3 +29,26 @@ def clan_details(clan, db):
     embed.set_footer(text=details["page"])
 
     return embed
+
+
+def clans_list(db):
+    # Retrieve the clan collection
+    collection_name = db['clans']
+
+    # Get all the clan documents
+    clans = collection_name.find()
+
+    # Create the embed
+    embed = discord.Embed(
+        title='Vampire Clans',
+        color=discord.Colour.dark_red()
+    )
+    for clan_name in clans:
+        embed.add_field(
+            name=clan_name['name'].upper(),
+            value=clan_name['description'],
+            inline=False
+        )
+    embed.set_footer(text='Core Rulebook, page 63')
+
+    return embed
