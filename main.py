@@ -2,7 +2,6 @@ import discord
 import os
 from dotenv import load_dotenv
 from discord.ext import commands
-import random
 from db_connect import connect_db
 
 load_dotenv()
@@ -11,9 +10,9 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 intents = discord.Intents.default()
 intents.members = True
 
-bot = commands.Bot(command_prefix='.', intents=intents)
+bot = commands.Bot(command_prefix='.', intents=intents, case_insensitive=True)
 db = connect_db()
-
+client = discord.Client()
 
 @bot.event
 async def on_ready():
@@ -35,6 +34,14 @@ async def clan(ctx, clan=""):
     from clans import clan_details
     embed = clan_details(clan, db)
     await ctx.send(embed=embed)
+
+
+@bot.event
+async def on_message(message):
+    """Delete commands from the channel"""
+    if message.content and message.content[0] == '.':
+        await bot.process_commands(message)
+        await message.delete()
 
 
 bot.run(TOKEN)
