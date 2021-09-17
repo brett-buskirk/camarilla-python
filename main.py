@@ -36,12 +36,31 @@ async def clan(ctx, clan=""):
     await ctx.send(embed=embed)
 
 
+@bot.command(help="Retrieves information about specific discipline.")
+async def discipline(ctx, discipline=""):
+    """Returns the requested discipline information"""
+    from disciplines import discipline_details
+    embed = discipline_details(discipline, db)
+    await ctx.send(embed=embed)
+
+
+@bot.command(help="Retrieves information about specific Animalism power.")
+async def animalism(ctx, power=""):
+    """Returns the requested power information"""
+    from disciplines import discipline_power
+    embed = discipline_power("animalism", power.lower(), db)
+    await ctx.send(embed=embed)
+
+
 @bot.command(help="Retrieves a specified rule or list.")
 async def lookup(ctx, rule=""):
     """Returns the requested list"""
     if rule == 'clans':
         from clans import clans_list
         embed = clans_list(db)
+    elif rule == 'disciplines':
+        from disciplines import discipline_list
+        embed = discipline_list(db)
     else:
         embed = discord.Embed(
             title=f'Cannot find {rule}',
@@ -49,6 +68,12 @@ async def lookup(ctx, rule=""):
         )
 
     await ctx.send(embed=embed)
+
+
+@bot.command(help="Creates a scene break.")
+async def br(ctx, kind="scene"):
+    """Returns a scene break to control the flow of action"""
+    await ctx.send(f'```\n {kind.upper()} BREAK \n```')
 
 
 @bot.event
