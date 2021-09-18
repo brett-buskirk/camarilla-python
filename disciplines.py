@@ -22,20 +22,9 @@ def discipline_details(discipline, db):
         color=discord.Colour.dark_red()
     )
     embed.set_thumbnail(url='https://i.imgur.com/MYTRmLX.png')
-    for power in details['level1']:
-        embed.add_field(name=f'[1] {power["name"].upper()}', value=power["description"], inline=False)
-
-    for power in details['level2']:
-        embed.add_field(name=f'[2] {power["name"].upper()}', value=power["description"], inline=False)
-
-    for power in details['level3']:
-        embed.add_field(name=f'[3] {power["name"].upper()}', value=power["description"], inline=False)
-
-    for power in details['level4']:
-        embed.add_field(name=f'[4] {power["name"].upper()}', value=power["description"], inline=False)
-
-    for power in details['level5']:
-        embed.add_field(name=f'[5] {power["name"].upper()}', value=power["description"], inline=False)
+    for level in ['level1', 'level2', 'level3', 'level4', 'level5']:
+        for power in details[level]:
+            embed.add_field(name=f'[{level[-1]}] {power["name"].upper()}', value=power["description"], inline=False)
 
     embed.set_footer(text='Core Rulebook, page 244')
 
@@ -53,26 +42,11 @@ def discipline_power(discipline, power, db):
     # Get the specific power
     power_data = False
     power_level = 0
-    for pwr in discipline_data['level1']:
-        if pwr['name'] == power:
-            power_data = pwr
-            power_level = 1
-    for pwr in discipline_data['level2']:
-        if pwr['name'] == power:
-            power_data = pwr
-            power_level = 2
-    for pwr in discipline_data['level3']:
-        if pwr['name'] == power:
-            power_data = pwr
-            power_level = 3
-    for pwr in discipline_data['level4']:
-        if pwr['name'] == power:
-            power_data = pwr
-            power_level = 4
-    for pwr in discipline_data['level5']:
-        if pwr['name'] == power:
-            power_data = pwr
-            power_level = 5
+    for level in ['level1', 'level2', 'level3', 'level4', 'level5']:
+        for pwr in discipline_data[level]:
+            if pwr['name'] == power:
+                power_data = pwr
+                power_level = level[-1]
 
     if not power_data:
         embed = discord.Embed(
