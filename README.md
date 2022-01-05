@@ -7,4 +7,3 @@ Packages added:
 * pymongo
 * dnspython
 * pandas (mostly for dev purposes)
- 
