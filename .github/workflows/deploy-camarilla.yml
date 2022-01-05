@@ -15,7 +15,7 @@ jobs:
         key: ${{secrets.SSH_KEY}}
         username: ${{secrets.SSH_USERNAME}}
 
-        script:
+        script: |
           mkdir test
           cd test
           git clone git@github.com:brett-buskirk/camarilla.git
