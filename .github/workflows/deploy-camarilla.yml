@@ -16,6 +16,5 @@ jobs:
         username: ${{secrets.SSH_USERNAME}}
 
         script: |
-          su - brett
           cd camarilla
           git pull
