@@ -78,8 +78,8 @@ async def br(ctx, kind="scene"):
 
 @bot.command(help="Displays a welcome message.")
 async def welcome(ctx):
-  """Returns a welcome message"""
-  await ctx.send('Hello and welcome from Camarilla!')
+    """Returns a welcome message"""
+    await ctx.send('Hello and welcome from Camarilla!')
 
 
 @bot.event
