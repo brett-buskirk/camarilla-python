@@ -74,6 +74,12 @@ async def lookup(ctx, rule=""):
 async def br(ctx, kind="scene"):
     """Returns a scene break to control the flow of action"""
     await ctx.send(f'```\n {kind.upper()} BREAK \n```')
+    
+
+@bot.command(help="Displays a welcome message.")
+async def welcome(ctx):
+  """Returns a welcome message"""
+  await ctx.send('Hello and welcome from Camarilla!')
 
 
 @bot.event
