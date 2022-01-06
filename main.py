@@ -50,7 +50,15 @@ async def animalism(ctx, power=""):
     from disciplines import discipline_power
     embed = discipline_power("animalism", power.lower(), db)
     await ctx.send(embed=embed)
-
+    
+    
+@bot.command(help="Retrieves information about specific Auspex power.")
+async def auspex(ctx, power=""):
+    """Returns the requested power information"""
+    from disciplines import discipline_power
+    embed = discipline_power("auspex", power.lower(), db)
+    await ctx.send(embed=embed)
+    
 
 @bot.command(help="Retrieves a specified rule or list.")
 async def lookup(ctx, rule=""):
