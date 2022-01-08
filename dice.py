@@ -99,15 +99,22 @@ def dice_roll(s_dice, op, h_dice):
 
     # Determine final successes
     final_success = success + critical_tally
-
+    
+    #Format rolls for output
+    f_standard = ", ".join([str(int) for int in standard_rolls]) if len(standard_rolls) > 0 else "None"
+    f_hunger = ", ".join([str(int) for int in hunger_rolls]) if len(hunger_rolls) > 0 else "None"
+    
+    print(f_standard)
+    print(f_hunger)
+    
     # Format embed to send to server
     embed = discord.Embed(
         title='Results',
         color=discord.Colour.dark_red()
     )
     embed.set_thumbnail(url="https://i.imgur.com/C0IhAEr.jpg")
-    embed.add_field(name='Standard Dice', value=f'{s_dice} dice: {str(standard_rolls)}', inline=False)
-    embed.add_field(name='Hunger Dice', value=f'{h_dice} dice: {str(hunger_rolls)}', inline=False)
+    embed.add_field(name=f'Standard Dice: {s_dice}', value=f'{f_standard}', inline=False)
+    embed.add_field(name=f'Hunger Dice: {h_dice}', value=f'{f_hunger}', inline=False)
     embed.add_field(name='Normal Successes', value=str(success), inline=True)
     embed.add_field(name='Critical Successes', value=str(critical), inline=True)
     embed.add_field(name='Total Successes', value=str(final_success), inline=False)
