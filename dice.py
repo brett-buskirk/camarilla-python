@@ -11,7 +11,7 @@ def error_embed():
     )
     embed.add_field(
         name="Notes",
-        value="The first N is for standard dice; the second N is for hunger dice.",
+        value="The first N is for standard dice; the second N is for hunger level.",
         inline=False
     )
     embed.add_field(
@@ -21,7 +21,7 @@ def error_embed():
     )
     embed.add_field(
         name="Hunger Dice",
-        value="The number of hunger dice must be between 0 and 5.",
+        value="The level of hunger must be between 0 and 5.",
         inline=False
     )
     return embed
@@ -41,7 +41,7 @@ def dice_roll(s_dice, op, h_dice):
     if s_dice <= 0:
         return error_embed()
 
-    # Check to make sure the hunger dice are between 0 and 5
+    # Check to make sure the hunger level is between 0 and 5
     if h_dice < 0 or h_dice > 5:
         return error_embed()
 
@@ -53,6 +53,18 @@ def dice_roll(s_dice, op, h_dice):
     standard_rolls = []
     success = 0
     critical = 0
+    
+    # Calculate dice totals
+    if s_dice > h_dice:
+        s_dice = s_dice - h_dice
+        h_dice = h_dice
+    elif s_dice < h_dice:
+        h_dice = s_dice
+        s_dice = 0
+    else:
+        s_dice = 0
+        h_dice = h_dice
+    
     for i in range(s_dice):
         rand = random.randint(1, 10)
         standard_rolls.append(rand)
