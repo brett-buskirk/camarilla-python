@@ -20,11 +20,11 @@ async def on_ready():
     print('------------')
 
 
-@bot.command(help='Rolls dice in N or N -h N format, where -h N are hunger dice.')
-async def roll(ctx, s_dice='0', op='-h', h_dice='0'):
+@bot.command(help='.roll <dice_pool> [-h <hunger> -d <difficulty>]')
+async def roll(ctx, dice_pool, *args):
     """Rolls dice in N -h N format."""
     from dice import dice_roll
-    embed = dice_roll(s_dice, op, h_dice)
+    embed = dice_roll(dice_pool, *args)
     await ctx.send(embed=embed)
 
 
